@@ -55,69 +55,39 @@ const loginOrRegisterWithThirdParty = async (userData: any) => {
   return { user, tokens };
 };
 
-const resendVerificationEmail = async (args: any) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  const user = await authService.getUserByEmail(args.email);
+const resendVerificationEmail = catchReq(async (req, res) => {
+  const user = await authService.getUserByEmail(req.query.email);
   if (user.isEmailVerified) {
     throw new ApiError(httpStatus.ALREADY_REPORTED, 'This email is already verified');
   }
   await sendVerificationEmail(user);
-};
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
-const forgotPassword = async (args: IForgotPasswordInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.forgotPassword.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
-
+const forgotPassword = catchReq(async (req, res) => {
   // Email verification
-  const user = await authService.getUserByEmail(args.email);
+  const user = await authService.getUserByEmail(req.body.email);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this email');
 
   // new Password genenration
   const newPassword = generatePassword(12, false, /[\w]/);
-  await authService.resetPassword(user, newPassword);
+  await authService.resetPassword(user._id, newPassword);
 
   // Send the new password by email
-  await emailService.sendResetPasswordEmail(args.email, newPassword);
-};
+  await emailService.sendResetPasswordEmail(req.body.email, newPassword);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
-const resetPassword = async (user: any, args: IResetPasswordInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.resetPassword.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
+const resetPassword = catchReq(async (req, res) => {
+  await authService.checkPassword(req.query.userID, req.body.oldPassword);
+  await authService.resetPassword(req.query.userID, req.body.newPassword);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
-  await authService.checkPassword(user, args.oldPassword);
-
-  await authService.resetPassword(user, args.newPassword);
-};
-
-const refreshTokens = async (user: any, args: IRefreshTokenInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.refreshTokens.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
-
-  const tokens = await authService.refreshAuth(user, args.refreshToken);
-  return tokens;
-};
+const refreshTokens = catchReq(async (req: Request, res: Response) => {
+  const tokens = await authService.refreshAuth(req.body.refreshToken);
+  res.send({ ...tokens });
+});
 
 const logout = catchReq(async (req: Request, res: Response) => {
   await authService.logout(req.body.refreshToken);

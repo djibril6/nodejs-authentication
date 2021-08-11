@@ -30,22 +30,39 @@ const logout = {
   }),
 };
 
-const refreshTokens = Joi.object().keys({
-  refreshToken: Joi.string().required(),
-});
+const refreshTokens = {
+  body: Joi.object().keys({
+    refreshToken: Joi.string().required(),
+  }),
+};
 
-const forgotPassword = Joi.object().keys({
-  email: Joi.string().email().required(),
-});
+const forgotPassword = {
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+  }),
+};
 
-const resetPassword = Joi.object().keys({
-  oldPassword: Joi.string().required(),
-  newPassword: Joi.string().required(),
-});
+const resendVerificationEmail = {
+  query: Joi.object().keys({
+    email: Joi.string().email().required(),
+  }),
+};
 
-const verifyEmail = Joi.object().keys({
-  token: Joi.string().required(),
-});
+const resetPassword = {
+  query: {
+    userID: Joi.string().required()
+  },
+  body: Joi.object().keys({
+    oldPassword: Joi.string().required(),
+    newPassword: Joi.string().required(),
+  }),
+};
+
+const verifyEmail = {
+  query: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+};
   
 
 const authValidation = {

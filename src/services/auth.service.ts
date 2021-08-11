@@ -100,7 +100,8 @@ const loginUserWithTelAndPassword = async (tel: string, password: string) => {
  * @param userId 
  * @param password 
  */
-const checkPassword = async (user: any, password: string) => {
+const checkPassword = async (userID: string, password: string) => {
+  const user = await getUserById(userID);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password');
   }
@@ -123,10 +124,11 @@ const logout = async (refreshToken: string) => {
  * @param {string} refreshToken
  * @returns {Promise<Object>}
  */
-const refreshAuth = async (user: any, refreshToken: string) => {
+const refreshAuth = async (refreshToken: string) => {
   try {
     const refreshTokenDoc = await tokenService.verifyToken(refreshToken, global.tokenTypes.REFRESH);
-    if (user.id !== refreshTokenDoc.user) {
+    const user = await getUserById(refreshTokenDoc.user);
+    if (!user) {
       throw new Error();
     }
     await refreshTokenDoc.remove();
@@ -141,9 +143,9 @@ const refreshAuth = async (user: any, refreshToken: string) => {
  * @param {User} user
  * @param {string} newPassword
  */
-const resetPassword = async (user: any, newPassword: string) => {
+const resetPassword = async (userID: string, newPassword: string) => {
   try {
-    await updateUserById(user.id, { password: newPassword });
+    await updateUserById(userID, { password: newPassword });
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
   }
