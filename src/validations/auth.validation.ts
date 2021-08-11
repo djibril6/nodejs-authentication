@@ -10,10 +10,12 @@ const register = {
   }),
 };
 
-const loginWithEmail = Joi.object().keys({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
+const loginWithEmail = {
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
+};
 
 const loginWithTel = Joi.object().keys({
   tel: Joi.string().required(),

@@ -29,20 +29,11 @@ const sendVerificationEmail = async (user: any) => {
   await emailService.sendVerificationEmail(user.email, verifyEmailToken);
 };
 
-const loginWithEmail = async (args: IEmailLoginInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.loginWithEmail.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
-
-  const user = await authService.loginUserWithEmailAndPassword(args.email, args.password);
+const loginWithEmail = catchReq(async (req: Request, res: Response) => {
+  const user = await authService.loginUserWithEmailAndPassword(req.body.email, req.body.password);
   const tokens = await tokenService.generateAuthTokens(user);
-  return { user, tokens };
-};
+  res.status(httpStatus.ACCEPTED).send({ user, tokens });
+});
 
 const loginWithTel = async (args: ITelLoginInput) => {
   try {
