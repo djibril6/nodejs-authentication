@@ -55,16 +55,16 @@ const loginOrRegisterWithThirdParty = async (userData: any) => {
   return { user, tokens };
 };
 
-const resendVerificationEmail = catchReq(async (req, res) => {
-  const user = await authService.getUserByEmail(req.query.email);
+const resendVerificationEmail = catchReq(async (req: Request, res: Response) => {
+  const user = await authService.getUserByEmail(req.body.email);
   if (user.isEmailVerified) {
     throw new ApiError(httpStatus.ALREADY_REPORTED, 'This email is already verified');
   }
   await sendVerificationEmail(user);
-  res.status(httpStatus.NO_CONTENT).send();
+  res.status(httpStatus.OK).send("Email verification sent");
 });
 
-const forgotPassword = catchReq(async (req, res) => {
+const forgotPassword = catchReq(async (req: Request, res: Response) => {
   // Email verification
   const user = await authService.getUserByEmail(req.body.email);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this email');
@@ -78,7 +78,7 @@ const forgotPassword = catchReq(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const resetPassword = catchReq(async (req, res) => {
+const resetPassword = catchReq(async (req: any, res: Response) => {
   await authService.checkPassword(req.query.userID, req.body.oldPassword);
   await authService.resetPassword(req.query.userID, req.body.newPassword);
   res.status(httpStatus.NO_CONTENT).send();
@@ -94,14 +94,14 @@ const logout = catchReq(async (req: Request, res: Response) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const verifyEmail = async (args: IVerifyEmailInput, res: Response) => {
+const verifyEmail = catchReq(async (req: any, res: Response) => {
   try {
-    await authService.verifyEmail(args.token);
+    await authService.verifyEmail(req.query.token);
     res.status(httpStatus.ACCEPTED).send('Email verified.');
   } catch(error) {
     throw new ApiError(httpStatus.BAD_REQUEST, error);
   }
-};
+});
 
 const authController = {
   register,

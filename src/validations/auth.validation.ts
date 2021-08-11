@@ -43,7 +43,7 @@ const forgotPassword = {
 };
 
 const resendVerificationEmail = {
-  query: Joi.object().keys({
+  body: Joi.object().keys({
     email: Joi.string().email().required(),
   }),
 };
@@ -74,6 +74,7 @@ const authValidation = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  resendVerificationEmail
 };
 
 export default authValidation;
