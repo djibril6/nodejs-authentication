@@ -119,21 +119,7 @@ const refreshTokens = async (user: any, args: IRefreshTokenInput) => {
   return tokens;
 };
 
-const logout = async (args: ILogoutInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.logout.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
-
-  const tokens = await authService.logout(args.refreshToken);
-  return tokens;
-};
-
-const logout = catchAsync(async (req, res) => {
+const logout = catchReq(async (req: Request, res: Response) => {
   await authService.logout(req.body.refreshToken);
   res.status(httpStatus.NO_CONTENT).send();
 });

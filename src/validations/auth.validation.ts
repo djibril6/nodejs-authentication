@@ -24,9 +24,11 @@ const loginWithTel = {
   }),
 };
 
-const logout = Joi.object().keys({
-  refreshToken: Joi.string().required(),
-});
+const logout = {
+  body: Joi.object().keys({
+    refreshToken: Joi.string().required(),
+  }),
+};
 
 const refreshTokens = Joi.object().keys({
   refreshToken: Joi.string().required(),
