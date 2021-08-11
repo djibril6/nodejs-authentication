@@ -17,10 +17,12 @@ const loginWithEmail = {
   }),
 };
 
-const loginWithTel = Joi.object().keys({
-  tel: Joi.string().required(),
-  password: Joi.string().required(),
-});
+const loginWithTel = {
+  body: Joi.object().keys({
+    tel: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
+};
 
 const logout = Joi.object().keys({
   refreshToken: Joi.string().required(),

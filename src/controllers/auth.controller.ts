@@ -35,20 +35,11 @@ const loginWithEmail = catchReq(async (req: Request, res: Response) => {
   res.status(httpStatus.ACCEPTED).send({ user, tokens });
 });
 
-const loginWithTel = async (args: ITelLoginInput) => {
-  try {
-    
-  } catch (error) {
-    
-  }
-  // Data validation
-  const { error } = authValidation.loginWithTel.validate(args);
-  if (error) throw new ApiError(httpStatus.BAD_REQUEST, `Validation error: ${error.message}`);
-
-  const user = await authService.loginUserWithTelAndPassword(args.tel, args.password);
+const loginWithTel = catchReq(async (req: Request, res: Response) => {
+  const user = await authService.loginUserWithTelAndPassword(req.body.tel, req.body.password);
   const tokens = await tokenService.generateAuthTokens(user);
-  return { user, tokens };
-};
+  res.status(httpStatus.ACCEPTED).send({ user, tokens });
+});
 
 const loginOrRegisterWithThirdParty = async (userData: any) => {
   try {
