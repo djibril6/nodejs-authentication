@@ -25,7 +25,6 @@ const userSchema = new Schema<IUserDocument, IUserModel>(
         },
         password: {
             type: String,
-            required: true,
             trim: true,
             minlength: 8,
             validate(value: string) {

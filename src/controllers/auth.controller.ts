@@ -64,7 +64,7 @@ const resendVerificationEmail = catchReq(async (req: Request, res: Response) => 
 const googleAuth = catchReq(async (req: any, res: Response) => {
   if (req.user) {
     const userData: IUserDataInput = {
-      email: req.user.emails[0],
+      email: req.user.emails[0].value,
       isEmailVerified: req.user.emails[0].verified,
       thirdPartyID: req.user.id,
       registeredWith: req.user.provider,
