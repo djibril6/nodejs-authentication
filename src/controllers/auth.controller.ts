@@ -12,7 +12,9 @@ import {
   IResetPasswordInput, 
   IRefreshTokenInput, 
   ILogoutInput, 
-  IVerifyEmailInput 
+  IVerifyEmailInput, 
+  EUserRole,
+  IUserDataInput
 } from '../config/types';
 
 const register = catchReq(async (req: Request, res: Response) => {
@@ -41,12 +43,7 @@ const loginWithTel = catchReq(async (req: Request, res: Response) => {
   res.status(httpStatus.ACCEPTED).send({ user, tokens });
 });
 
-const loginOrRegisterWithThirdParty = async (userData: any) => {
-  try {
-    
-  } catch (error) {
-    
-  }
+const loginOrRegisterWithThirdParty = async (userData: IUserDataInput) => {
   let user = await authService.getUserByEmail(userData.email);
   if (!user) {
     user = await authService.userRegistration(userData);
@@ -62,6 +59,22 @@ const resendVerificationEmail = catchReq(async (req: Request, res: Response) => 
   }
   await sendVerificationEmail(user);
   res.status(httpStatus.OK).send("Email verification sent");
+});
+
+const googleAuth = catchReq(async (req: any, res: Response) => {
+  if (req.user) {
+    const userData: IUserDataInput = {
+      email: req.user.emails[0],
+      isEmailVerified: req.user.emails[0].verified,
+      thirdPartyID: req.user.id,
+      registeredWith: req.user.provider,
+      role: EUserRole.DEVELOPER
+    }
+    const { user, tokens } = await loginOrRegisterWithThirdParty(userData);
+    res.status(httpStatus.ACCEPTED).send({ user, tokens });
+  } else {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this account');
+  }
 });
 
 const forgotPassword = catchReq(async (req: Request, res: Response) => {
@@ -114,6 +127,7 @@ const authController = {
   verifyEmail,
   logout,
   resendVerificationEmail,
+  googleAuth
 };
 
 export default authController;

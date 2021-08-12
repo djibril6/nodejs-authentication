@@ -58,7 +58,7 @@ const sendResetPasswordEmail = async (to: string, newPassword: string) => {
 const sendVerificationEmail = async (to: string, token: string) => {
   const subject = 'Email Verification';
   // TODO: -- replace this url with the link to the email verification service back-end app
-  const verificationEmailUrl = `${config.verificationEmailUrl}:${config.port}/api/auth/verify-email/${token}`;
+  const verificationEmailUrl = `http://127.0.0.1:${config.port}/api/auth/verify-email/${token}`;
   const text = `Dear user,
   To verify your email, click on this link: ${verificationEmailUrl}
   If you did not create an account, then ignore this email.`;

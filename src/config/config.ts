@@ -17,9 +17,10 @@ const envVarsSchema = Joi.object()
     JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
       .default(10)
       .description('minutes after which verify email token expires'),
-    EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
-    VERIFICATION_EMAIL_URL: Joi.string().required().description('Base url for emai verification'),
+    EMAIL_FROM: Joi.string().required().description('the from field in the emails sent by the app'),
     SENDGRID_API_KEY: Joi.string().required().description('Sendgrid api key required'),
+    CLIENT_ID: Joi.string().required().description('Google auth client ID required'),
+    CLIENT_SECRET: Joi.string().required().description('Google auth client secret required'),
   })
   .unknown();
 
@@ -61,6 +62,9 @@ const config = {
     from: envVars.EMAIL_FROM,
     sendgridAPIKey: envVars.SENDGRID_API_KEY
   },
-  verificationEmailUrl: envVars.VERIFICATION_EMAIL_URL
+  google: {
+    clientID: envVars.CLIENT_ID,
+    clientSecret: envVars.CLIENT_SECRET
+  }
 };
 export default config;

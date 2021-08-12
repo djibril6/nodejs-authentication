@@ -9,6 +9,7 @@ export {
     IRefreshTokenInput, 
     IForgotPasswordInput,
     IResetPasswordInput,
-    IVerifyEmailInput
+    IVerifyEmailInput,
+    IUserDataInput
 } from './user.type';
 export { tokenInterface, ETokenType } from './token.type';

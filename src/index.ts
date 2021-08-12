@@ -1,17 +1,16 @@
-import cors from 'cors';
 import express from 'express';
+import cors from 'cors';
+import authRoute from './routes/auth.route';
+import { config } from './config';
+import './middlewares/custom_passport';
 
 const app = express();
 
 app.use(cors());
 app.use('*', cors());
 
-app.get('/',
-    (req, res) => {
-        res.send("req.user.profile");
-    }
-);
+app.use('/auth', authRoute);
 
-app.listen(3000, () => {
-    console.log(`Server listening on port ${3000}`)
+app.listen(config.port, () => {
+    console.log(`Server listening on port ${config.port}`)
 })

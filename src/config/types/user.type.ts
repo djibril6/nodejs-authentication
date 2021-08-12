@@ -5,6 +5,9 @@ export interface ITel { tel?: string; }
 export interface IPassword { password?: string; }
 export interface IRole { role?: EUserRole; }
 export interface IRefreshToken { refreshToken?: string; }
+export interface IIsEmailVerified { isEmailVerified?: boolean; }
+export interface IRegisteredWith { registeredWith?: string; }
+export interface IThirdPartyID { thirdPartyID?: string; }
 
 export enum EUserRole {
     MANAGER = 'manager',
@@ -17,10 +20,7 @@ export interface IUserModel extends Model<IUserDocument> {
 }
 
 export interface IUserDocument extends 
-IEmail, IPassword, ITel, IRole {
-    isEmailVerified?: boolean;
-    registeredWith?: string;
-    thirdPartyID?: string;
+IEmail, IPassword, ITel, IRole, IIsEmailVerified, IRegisteredWith, IThirdPartyID {
     isPasswordMatch?: (password: string) => Promise<boolean>;
 }
 
@@ -37,3 +37,9 @@ export interface IResetPasswordInput {
 export interface IVerifyEmailInput {
     token: string;
 };
+export interface IUserDataInput extends 
+    IEmail, 
+    IRole, 
+    IIsEmailVerified, 
+    IRegisteredWith, 
+    IThirdPartyID {}
