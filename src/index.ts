@@ -3,9 +3,9 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import cookieSession from 'cookie-session'
-import authRoute from './routes/auth.route';
 import { config } from './config';
 import './middlewares/custom_passport';
+import { authRoute, docRoute } from './routes';
 
 const app = express();
 
@@ -23,6 +23,7 @@ app.use('*', cors());
 app.use(express.json());
 
 app.use('/auth', authRoute);
+app.use('/doc', docRoute);
 
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
     app.listen(config.port, () => {
