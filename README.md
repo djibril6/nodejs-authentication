@@ -4,14 +4,13 @@ This project is a node.js application for a complete authentication system using
 
 ## Table of Contents
 
+- [Installation](#installation-and-onfiguration)
+- [Running the project](#running-the-project)
 - [Features](#features)
-- [Commands](#commands)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Authentication](#authentication)
 - [Authorization](#authorization)
-- [Logging](#logging)
-- [Linting](#linting)
 
 ## Installation and Configuration
 
