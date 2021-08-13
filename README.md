@@ -93,7 +93,7 @@ src\
 
 ## API Documentation
 
-To see the documentation, run the server in development mode and go to `http://localhost:{PORT}/api/graphql` in your browser. 
+To see the documentation, run the server in development mode and go to `http://localhost:{PORT}/doc` in your browser. 
 
 ## Authentication
 
