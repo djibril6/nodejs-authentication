@@ -50,9 +50,11 @@ authRoute.get('/google-failure', () => {
     throw new ApiError(httpStatus.UNAUTHORIZED, '⛔ Authentication failed!');
 });
 
-// Google authentication
-authRoute.get('/facebook', passport.authenticate('facebook', { authType: 'reauthenticate' }
-));
+// Facebook authentication
+authRoute.get('/facebook', passport.authenticate('facebook', { 
+    authType: 'reauthenticate', 
+    scope: ["email", "public_profile"] 
+}));
 authRoute.get('/facebook-callback', passport.authenticate('facebook', {
     successRedirect: '/auth/facebook-success',
     failureRedirect: '/auth/facebook-failure'
@@ -397,13 +399,33 @@ export default authRoute;
  *       "204":
  *         description: No content
  *       "401":
- *         description: verify email failed
+ *         description: GoogleAuthorizationError
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
  *               code: 401
- *               message: verify email failed
+ *               message: email or password incorrects
+ */
+
+/**
+ * @swagger
+ * /auth/facebook:
+ *   get:
+ *     summary: Authentication with Facebook
+ *     tags: [Auth]
+ *     responses:
+ *       "204":
+ *         description: No content
+ *       "401":
+ *         description: FacebookAuthorizationError
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 401
+ *               message:  email or password incorrects
  */
  
