@@ -38,7 +38,7 @@ authRoute.patch('/update-password',
     authController.resetPassword);
 
 // Google authentication
-authRoute.get('/google', passport.authenticate('google', { scope:
+authRoute.get('/google', passport.authenticate('google', { authType: 'reauthenticate', scope:
     [ 'email', 'profile' ] }
 ));
 authRoute.get('/google-callback', passport.authenticate('google', {
@@ -47,6 +47,18 @@ authRoute.get('/google-callback', passport.authenticate('google', {
 }));
 authRoute.get('/google-success', authController.googleAuth);
 authRoute.get('/google-failure', () => {
+    throw new ApiError(httpStatus.UNAUTHORIZED, '⛔ Authentication failed!');
+});
+
+// Google authentication
+authRoute.get('/facebook', passport.authenticate('facebook', { authType: 'reauthenticate' }
+));
+authRoute.get('/facebook-callback', passport.authenticate('facebook', {
+    successRedirect: '/auth/facebook-success',
+    failureRedirect: '/auth/facebook-failure'
+}));
+authRoute.get('/facebook-success', authController.facebookAuth);
+authRoute.get('/facebook-failure', () => {
     throw new ApiError(httpStatus.UNAUTHORIZED, '⛔ Authentication failed!');
 });
 

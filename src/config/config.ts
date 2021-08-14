@@ -19,8 +19,10 @@ const envVarsSchema = Joi.object()
       .description('minutes after which verify email token expires'),
     EMAIL_FROM: Joi.string().required().description('the from field in the emails sent by the app'),
     SENDGRID_API_KEY: Joi.string().required().description('Sendgrid api key required'),
-    CLIENT_ID: Joi.string().required().description('Google auth client ID required'),
-    CLIENT_SECRET: Joi.string().required().description('Google auth client secret required'),
+    GOOGLE_CLIENT_ID: Joi.string().required().description('Google auth client ID required'),
+    GOOGLE_CLIENT_SECRET: Joi.string().required().description('Google auth client secret required'),
+    FACEBOOK_APP_ID: Joi.string().required().description('Facebook app ID required'),
+    FACEBOOK_SECRET: Joi.string().required().description('Facebook auth client secret required'),
   })
   .unknown();
 
@@ -63,8 +65,12 @@ const config = {
     sendgridAPIKey: envVars.SENDGRID_API_KEY
   },
   google: {
-    clientID: envVars.CLIENT_ID,
-    clientSecret: envVars.CLIENT_SECRET
+    clientID: envVars.GOOGLE_CLIENT_ID,
+    clientSecret: envVars.GOOGLE_CLIENT_SECRET
+  },
+  facebook: {
+    clientID: envVars.FACEBOOK_APP_ID,
+    clientSecret: envVars.FACEBOOK_SECRET
   }
 };
 export default config;

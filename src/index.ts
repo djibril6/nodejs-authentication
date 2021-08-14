@@ -3,16 +3,21 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import cookieSession from 'cookie-session'
+import { authRoute, docRoute } from './routes';
 import { config } from './config';
 import './middlewares/custom_passport';
-import { authRoute, docRoute } from './routes';
 
 const app = express();
 
 app.use(cookieSession({
     name: 'google-auth-session',
     keys: ['key1', 'key2']
-}))
+}));
+
+app.use(cookieSession({
+    name: 'facebook-auth-session',
+    keys: ['key1', 'key2']
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());

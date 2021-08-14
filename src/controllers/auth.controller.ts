@@ -77,6 +77,22 @@ const googleAuth = catchReq(async (req: any, res: Response) => {
   }
 });
 
+const facebookAuth = catchReq(async (req: any, res: Response) => {
+  if (req.user) {
+    const userData: IUserDataInput = {
+      email: req.user.email,
+      isEmailVerified: true,
+      thirdPartyID: req.user.id,
+      registeredWith: 'facebook',
+      role: EUserRole.DEVELOPER
+    }
+    const { user, tokens } = await loginOrRegisterWithThirdParty(userData);
+    res.status(httpStatus.ACCEPTED).send({ user, tokens });
+  } else {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this account');
+  }
+});
+
 const forgotPassword = catchReq(async (req: Request, res: Response) => {
   // Email verification
   const user = await authService.getUserByEmail(req.body.email);
@@ -127,7 +143,8 @@ const authController = {
   verifyEmail,
   logout,
   resendVerificationEmail,
-  googleAuth
+  googleAuth,
+  facebookAuth
 };
 
 export default authController;
